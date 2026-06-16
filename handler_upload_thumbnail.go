@@ -6,8 +6,6 @@ import (
 	"os"
 	"io"
 	"mime"
-	"crypto/rand"
-	"encoding/base64"
 
 	"github.com/google/uuid"
 	"github.com/bootdotdev/learn-file-storage-s3-golang-starter/internal/auth"
@@ -66,9 +64,7 @@ func (cfg *apiConfig) handlerUploadThumbnail(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	key := make([]byte, 32)
-	rand.Read(key)
-	thumbnailID := base64.RawURLEncoding.EncodeToString(key)
+	thumbnailID := getAssetRandomName()
 	filename := getFilename(thumbnailID, mediaType)
 	thumbnailDiskPath := cfg.getAssetDiskPath(filename)
 

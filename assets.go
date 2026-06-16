@@ -5,6 +5,8 @@ import (
 	"strings"
 	"path/filepath"
 	"os"
+	"crypto/rand"
+	"encoding/base64"
 )
 
 func (cfg apiConfig) ensureAssetsDir() error {
@@ -33,5 +35,15 @@ func (cfg apiConfig) getAssetDiskPath(filename string) string {
 
 func (cfg apiConfig) getAssetURL(filename string) string {
 	return fmt.Sprintf("http://localhost:%s/assets/%s", cfg.port, filename)
+}
+
+func (cfg apiConfig) getAssetS3URL(key string) string {
+	return fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", cfg.s3Bucket, cfg.s3Region, key)
+}
+
+func getAssetRandomName() string {
+	key := make([]byte, 32)
+	rand.Read(key)
+	return base64.RawURLEncoding.EncodeToString(key)
 }
 

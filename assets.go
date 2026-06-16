@@ -5,8 +5,6 @@ import (
 	"strings"
 	"path/filepath"
 	"os"
-
-	"github.com/google/uuid"
 )
 
 func (cfg apiConfig) ensureAssetsDir() error {
@@ -24,7 +22,7 @@ func mediaTypeToFileExtension(mediaType string) string {
 	return "." + parts[1]
 }
 
-func getFilename(videoID uuid.UUID, mediaType string) string {
+func getFilename(videoID string, mediaType string) string {
 	fileExtension := mediaTypeToFileExtension(mediaType)
 	return fmt.Sprintf("%s%s", videoID, fileExtension)
 }

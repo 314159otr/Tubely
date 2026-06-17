@@ -70,6 +70,22 @@ func (cfg *apiConfig) handlerUploadVideo(w http.ResponseWriter, r *http.Request)
 		respondWithError(w, http.StatusInternalServerError, "error copying to temp file", nil)
 		return
 	}
+
+	aspectRatio, err :=  getVideoAspectRatio(tempFile.Name())
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Could not get video aspect ratio", err)
+		return
+	}
+	var prefix string
+	if aspectRatio == "16:9" {
+		prefix = "landscape/"
+	} else if aspectRatio == "9:16" {
+		prefix = "portrait/"
+	} else {
+		prefix = "other/"
+	}
+	filename = prefix + filename
+
 	_, err = tempFile.Seek(0, io.SeekStart)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Could not reset temp file pointer", err)

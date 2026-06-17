@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"os/exec"
 	"bytes"
+	"errors"
 )
 
 func (cfg apiConfig) ensureAssetsDir() error {
@@ -48,6 +49,31 @@ func getAssetRandomName() string {
 	key := make([]byte, 32)
 	rand.Read(key)
 	return base64.RawURLEncoding.EncodeToString(key)
+}
+
+func processVideoForFastStart(filePath string) (string, error) {
+	outputFilePath := filePath + ".processing"
+	cmd := exec.Command(
+		"ffmpeg",
+		"-i", filePath,
+		"-c", "copy",
+		"-movflags", "faststart",
+		"-f", "mp4",
+		outputFilePath,
+	)
+	if err := cmd.Run(); err != nil {
+		return "", err
+	}
+
+	fileInfo, err := os.Stat(processedFilePath)
+	if err != nil {
+		return "", fmt.Errorf("could not stat processed file: %v", err)
+	}
+	if fileInfo.Size() == 0 {
+		return "", fmt.Errorf("processed file is empty")
+	}
+
+	return outputFilePath, nil
 }
 
 func getVideoAspectRatio(filePath string) (string, error) {

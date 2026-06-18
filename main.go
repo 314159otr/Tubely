@@ -6,7 +6,7 @@ import (
 	"os"
 	"context"
 
-	"github.com/bootdotdev/learn-file-storage-s3-golang-starter/internal/database"
+	"github.com/314159otr/Tubely/internal/database"
 
 	"github.com/joho/godotenv"
 	"github.com/aws/aws-sdk-go-v2/service/s3"

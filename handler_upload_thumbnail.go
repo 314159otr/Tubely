@@ -8,7 +8,7 @@ import (
 	"mime"
 
 	"github.com/google/uuid"
-	"github.com/bootdotdev/learn-file-storage-s3-golang-starter/internal/auth"
+	"github.com/314159otr/Tubely/internal/auth"
 )
 
 func (cfg *apiConfig) handlerUploadThumbnail(w http.ResponseWriter, r *http.Request) {

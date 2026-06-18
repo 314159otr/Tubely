@@ -45,6 +45,10 @@ func (cfg apiConfig) getAssetS3URL(key string) string {
 	return fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", cfg.s3Bucket, cfg.s3Region, key)
 }
 
+func (cfg apiConfig) getAssetCloudfrontURL(key string) string {
+	return fmt.Sprintf("%s/%s", cfg.s3CfDistribution, key)
+}
+
 func getAssetRandomName() string {
 	key := make([]byte, 32)
 	rand.Read(key)
@@ -65,7 +69,7 @@ func processVideoForFastStart(filePath string) (string, error) {
 		return "", err
 	}
 
-	fileInfo, err := os.Stat(processedFilePath)
+	fileInfo, err := os.Stat(outputFilePath)
 	if err != nil {
 		return "", fmt.Errorf("could not stat processed file: %v", err)
 	}
